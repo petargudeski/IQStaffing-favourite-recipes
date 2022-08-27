@@ -44,7 +44,7 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
-    private List<Ingredient> ingredients = new LinkedList<>();;
+    private List<Ingredient> ingredients = new LinkedList<>();
 
     @OneToMany(mappedBy = "recipe")
     private List<RecipeIngredient> units = new LinkedList<>();
