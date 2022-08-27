@@ -17,6 +17,8 @@ spring:
         show_sql: false # set to true for debugging integration tests
         format_sql: false # set to true for debugging integration tests
         ddl-auto: none
+        hbm2ddl:
+          auto: update
 
 springdoc:
   pathsToMatch: /api/**
