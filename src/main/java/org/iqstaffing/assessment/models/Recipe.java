@@ -7,7 +7,19 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.EntityListeners;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Version;
+import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +63,4 @@ public class Recipe {
 
     @Version
     private Integer version;
-
-
 }
