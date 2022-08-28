@@ -6,7 +6,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.iqstaffing.assessment.models.Recipe;
+import org.iqstaffing.assessment.models.dtos.RecipeDto;
 import org.iqstaffing.assessment.services.RecipeService;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class RecipeController {
 
     private final RecipeService recipeService;
+    private final ConversionService conversionService;
 
-    public RecipeController(RecipeService recipeService) {
+    public RecipeController(RecipeService recipeService, ConversionService conversionService) {
         this.recipeService = recipeService;
+        this.conversionService = conversionService;
     }
 
     @Operation(description = "Create recipe")
@@ -29,10 +33,13 @@ public class RecipeController {
             @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
             @ApiResponse(responseCode = "201", description = "Recipe was successful created.")})
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Recipe> add(@RequestBody Recipe recipe) {
+    public ResponseEntity<RecipeDto> add(@RequestBody Recipe recipe) {
+
         Recipe created = recipeService.add(recipe);
         log.info("Recipe with id={} successful created.", created.getId());
-        return new ResponseEntity(created, HttpStatus.CREATED);
+
+        RecipeDto createdDto = conversionService.convert(created, RecipeDto.class);
+        return new ResponseEntity(createdDto, HttpStatus.CREATED);
     }
 
     @Operation(description = "Get Recipe")
@@ -41,9 +48,12 @@ public class RecipeController {
             @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
             @ApiResponse(responseCode = "200", description = "Request was successful.")})
     @GetMapping(value = "/{recipeId}")
-    public ResponseEntity<Recipe> get(@PathVariable(value = "recipeId") Long recipeId) {
+    public ResponseEntity<RecipeDto> get(@PathVariable(value = "recipeId") Long recipeId) {
+
         Recipe recipe = recipeService.getById(recipeId);
         log.info("Fetch instruction with id={}", recipeId);
-        return new ResponseEntity(recipe, HttpStatus.OK);
+
+        RecipeDto recipeDto = conversionService.convert(recipe, RecipeDto.class);
+        return new ResponseEntity(recipeDto, HttpStatus.OK);
     }
 }
