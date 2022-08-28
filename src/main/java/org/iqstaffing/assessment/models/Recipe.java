@@ -34,23 +34,12 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Note note;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "instruction_id")
     private Instruction instruction;
 
-    @ManyToMany
-    @JoinTable(
-            name = "RECIPE_INGREDIENT",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id")
-    )
-    private List<Ingredient> ingredients = new LinkedList<>();
-
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeIngredient> units = new LinkedList<>();
-
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeIngredient> quantities = new LinkedList<>();
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeIngredient> recipeIngredients = new LinkedList<>();
 
     @CreatedDate
     @Column(name = "CREATED_AT")
@@ -62,4 +51,6 @@ public class Recipe {
 
     @Version
     private Integer version;
+
+
 }

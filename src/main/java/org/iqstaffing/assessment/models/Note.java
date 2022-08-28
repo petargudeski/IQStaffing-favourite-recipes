@@ -1,12 +1,18 @@
 package org.iqstaffing.assessment.models;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.OneToOne;
 
 @Entity
 @Table(schema = "FAVORITE_RECIPES", name = "NOTE")
-@Data
+@Getter
 public class Note {
 
     @Id
@@ -15,5 +21,13 @@ public class Note {
     private String note;
 
     @OneToOne
+    @JsonIgnore
     private Recipe recipe;
+
+    public Note() {}
+
+    public Note(String note, Recipe recipe) {
+        this.note = note;
+        this.recipe = recipe;
+    }
 }

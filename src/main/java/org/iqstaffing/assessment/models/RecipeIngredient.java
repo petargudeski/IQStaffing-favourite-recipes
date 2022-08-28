@@ -1,5 +1,6 @@
 package org.iqstaffing.assessment.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,11 +11,12 @@ import javax.persistence.*;
 public class RecipeIngredient {
 
     @EmbeddedId
-    private RecipeIngredientKey id;
+    private RecipeIngredientKey id = new RecipeIngredientKey();
 
     @ManyToOne
     @MapsId("recipeId")
     @JoinColumn(name = "recipe_id")
+    @JsonIgnore
     private Recipe recipe;
 
     @ManyToOne

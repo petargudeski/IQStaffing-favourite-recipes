@@ -42,7 +42,6 @@ public class InstructionServiceImpl implements InstructionService {
     @Override
     public Instruction getById(Long id) {
         Instruction instruction = instructionRepository.findById(id).orElseThrow(() -> new InstructionNotFoundException(id));
-        log.info("Fetch instruction with id={}", id);
         return instruction;
     }
 

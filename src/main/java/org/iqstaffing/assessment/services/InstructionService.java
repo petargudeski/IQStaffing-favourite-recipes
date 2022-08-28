@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface InstructionService {
 
-    public Instruction add(Instruction instruction);
+    Instruction add(Instruction instruction);
 
-    public void update(Long id, String body);
+    void update(Long id, String body);
 
-    public List<Instruction> getAll();
+    List<Instruction> getAll();
 
-    public Instruction getById(Long id);
+    Instruction getById(Long id);
 
-    public void delete(Long id);
+    void delete(Long id);
 }

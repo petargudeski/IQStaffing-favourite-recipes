@@ -66,6 +66,7 @@ public class InstructionController {
     @GetMapping(value = "/{instructionId}")
     public ResponseEntity<Instruction> get(@PathVariable(value = "instructionId") Long instructionId) {
         Instruction instruction = instructionService.getById(instructionId);
+        log.info("Fetch instruction with id={}", instructionId);
         return new ResponseEntity(instruction, HttpStatus.OK);
     }
 

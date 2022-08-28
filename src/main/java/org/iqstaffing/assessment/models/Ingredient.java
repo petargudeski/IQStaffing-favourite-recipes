@@ -1,11 +1,22 @@
 package org.iqstaffing.assessment.models;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.EntityListeners;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Version;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +24,7 @@ import java.util.List;
 @Entity
 @Table(schema = "FAVORITE_RECIPES", name = "INGREDIENT")
 @EntityListeners(AuditingEntityListener.class)
-@Data
+@Getter
 public class Ingredient {
 
     @Id
@@ -22,14 +33,9 @@ public class Ingredient {
 
     private String name;
 
-    @ManyToMany(mappedBy = "ingredients")
-    private List<Recipe> recipes = new LinkedList<>();
-
-    @OneToMany(mappedBy = "ingredient")
-    private List<RecipeIngredient> units = new LinkedList<>();
-
-    @OneToMany(mappedBy = "ingredient")
-    private List<RecipeIngredient> quantities = new LinkedList<>();
+    @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<RecipeIngredient> recipeIngredients = new LinkedList<>();
 
     @CreatedDate
     @Column(name = "CREATED_AT")
@@ -41,4 +47,10 @@ public class Ingredient {
 
     @Version
     private Integer version;
+
+    public Ingredient() {}
+
+    public Ingredient(String name) {
+        this.name = name;
+    }
 }
