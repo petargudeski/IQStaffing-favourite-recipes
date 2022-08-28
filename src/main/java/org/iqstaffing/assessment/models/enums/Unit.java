@@ -1,4 +1,4 @@
-package org.iqstaffing.assessment.models;
+package org.iqstaffing.assessment.models.enums;
 
 public enum Unit {
     WHOLE,

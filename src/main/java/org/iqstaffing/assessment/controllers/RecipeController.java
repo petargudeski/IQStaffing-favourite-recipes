@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.iqstaffing.assessment.models.Ingredient;
 import org.iqstaffing.assessment.models.Recipe;
 import org.iqstaffing.assessment.models.dtos.RecipeDto;
 import org.iqstaffing.assessment.services.RecipeService;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -55,5 +58,32 @@ public class RecipeController {
 
         RecipeDto recipeDto = conversionService.convert(recipe, RecipeDto.class);
         return new ResponseEntity(recipeDto, HttpStatus.OK);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
+            @ApiResponse(responseCode = "201", description = "Recipe was successful created.")})
+    @PostMapping(value= "/{recipeId}/ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RecipeDto> addIngredient(@RequestBody List<Ingredient> ingredients,
+                                                   @PathVariable(value = "recipeId") Long recipeId,
+                                                   @RequestParam(value = "quantity") int quantity,
+                                                   @RequestParam(value = "unit") String unit) {
+        Recipe recipe = recipeService.addIngredient(recipeId, ingredients, quantity, unit);
+
+        RecipeDto recipeDto = conversionService.convert(recipe, RecipeDto.class);
+        return new ResponseEntity(recipeDto, HttpStatus.CREATED);
+    }
+
+    @Operation(description = "Delete instruction")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs"),
+            @ApiResponse(responseCode = "404", description = "Recipe not found in database"),
+            @ApiResponse(responseCode = "204", description = "Recipe deleted successfully")})
+    @DeleteMapping(value = "/{recipeId}")
+    public ResponseEntity<?> delete(@PathVariable(value = "recipeId") Long recipeId) {
+        recipeService.delete(recipeId);
+        log.info("Deleted recipe with id={}", recipeId);
+        return ResponseEntity.noContent().build();
     }
 }

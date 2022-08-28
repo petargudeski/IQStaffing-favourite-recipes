@@ -1,7 +1,7 @@
 package org.iqstaffing.assessment.models.dtos;
 
 import lombok.Data;
-import org.iqstaffing.assessment.models.Unit;
+import org.iqstaffing.assessment.models.enums.Unit;
 
 @Data
 public class RecipeIngredientDto {

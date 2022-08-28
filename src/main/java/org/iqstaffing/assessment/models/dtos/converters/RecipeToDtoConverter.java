@@ -1,10 +1,15 @@
 package org.iqstaffing.assessment.models.dtos.converters;
 
 import org.iqstaffing.assessment.models.Recipe;
-import org.iqstaffing.assessment.models.dtos.*;
+import org.iqstaffing.assessment.models.dtos.NoteDto;
+import org.iqstaffing.assessment.models.dtos.RecipeDto;
+import org.iqstaffing.assessment.models.dtos.InstructionDto;
+import org.iqstaffing.assessment.models.dtos.IngredientDto;
+import org.iqstaffing.assessment.models.dtos.RecipeIngredientDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -29,6 +34,7 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
         recipeDto.setInstruction(instructionDto);
         recipeDto.getRecipeIngredient().addAll(recipe.getRecipeIngredients()
                 .stream()
+                .filter(Objects::nonNull)
                 .map(recipeIngredient -> {
                     RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
                     IngredientDto ingredientDto = new IngredientDto();
