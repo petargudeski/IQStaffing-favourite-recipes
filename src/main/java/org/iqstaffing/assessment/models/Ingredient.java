@@ -2,7 +2,7 @@ package org.iqstaffing.assessment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -24,7 +24,7 @@ import java.util.List;
 @Entity
 @Table(schema = "FAVORITE_RECIPES", name = "INGREDIENT")
 @EntityListeners(AuditingEntityListener.class)
-@Getter
+@Data
 public class Ingredient {
 
     @Id

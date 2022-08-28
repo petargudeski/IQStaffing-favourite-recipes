@@ -42,25 +42,25 @@ public class RecipeServiceImpl implements RecipeService {
         this.converterUtil = converterUtil;
     }
 
+    /**
+     * Returning back Recipe object per id
+     * @param id recipe id
+     * @return Recipe
+     */
     @Override
     public Recipe getById(Long id) {
         return recipeRepository.findById(id).orElseThrow(() -> new IngredientNotFoundException(id));
     }
 
+    /**
+     * Adding new Recipe along with all nested objects.
+     * @param recipe Object
+     * @return saved Recipe
+     */
     @Override
     public Recipe add(Recipe recipe) {
 
-        if (Objects.isNull(recipe.getCategory())) {
-            throw new IllegalArgumentException("Category cannot be null when creating a recipe.");
-        }
-
-        if (Objects.isNull(recipe.getDifficulty())) {
-            throw new IllegalArgumentException("Difficulty cannot be null when creating a recipe.");
-        }
-
-        if (Objects.isNull(recipe.getRecipeIngredients())) {
-            throw new IllegalArgumentException("Ingredients cannot be null when creating a recipe, you must have a value or remove the property.");
-        }
+        checkRecipe(recipe);
 
         Recipe newRecipe = new Recipe();
         newRecipe.setName(recipe.getName());
@@ -97,6 +97,47 @@ public class RecipeServiceImpl implements RecipeService {
         return recipeRepository.save(newRecipe);
     }
 
+    /**
+     * Update Recipe object along with all nested objects.
+     * @param recipeId
+     * @param recipeBody
+     * @return Updated Recipe object
+     */
+    @Override
+    @Transactional
+    @Retryable(include = ObjectOptimisticLockingFailureException.class, maxAttempts = 5, backoff = @Backoff(multiplier = 2.0, random = true))
+    public Recipe update(Long recipeId, Recipe recipeBody) {
+
+        checkRecipe(recipeBody);
+
+        Recipe recipe = getById(recipeId);
+        recipe.setName(recipeBody.getName());
+        recipe.setNumberOfServings(recipeBody.getNumberOfServings());
+        recipe.setDifficulty(recipeBody.getDifficulty());
+        recipe.setCategory(recipeBody.getCategory());
+        recipe.getNote().setNote(recipeBody.getNote().getNote());
+        recipe.getInstruction().setInstruction(recipeBody.getInstruction().getInstruction());
+
+        recipe.getRecipeIngredients().forEach(recipeIngredients -> {
+            recipeBody.getRecipeIngredients().forEach(recipeIngredientsBody -> {
+                if (recipeIngredientsBody.getId().equals(recipeIngredients.getId())) {
+                    recipeIngredients.getIngredient().setName(recipeIngredientsBody.getIngredient().getName());
+                    recipeIngredients.setQuantity(recipeIngredientsBody.getQuantity());
+                    recipeIngredients.setUnit(recipeIngredientsBody.getUnit());
+                }
+            });
+        });
+        return recipe;
+    }
+
+    /**
+     * Adding additional ingredients to Recipe
+     * @param id recipe id
+     * @param ingredients List of Ingredients objects
+     * @param quantity count of single ingredient
+     * @param unit of quentity
+     * @return Recipe object with all existing and added Ingredients
+     */
     @Override
     @Transactional
     @Retryable(include = ObjectOptimisticLockingFailureException.class, maxAttempts = 5, backoff = @Backoff(multiplier = 2.0, random = true))
@@ -134,9 +175,31 @@ public class RecipeServiceImpl implements RecipeService {
         return recipe;
     }
 
+    /**
+     * Remove Recipe
+     * @param id Recipe id
+     */
     @Override
     @Transactional
     public void delete(Long id) {
         recipeRepository.delete(getById(id));
+    }
+
+    /**
+     * Check if Recipe data is valid
+     * @param recipe
+     */
+    private void checkRecipe(Recipe recipe) {
+        if (Objects.isNull(recipe.getCategory())) {
+            throw new IllegalArgumentException("Category cannot be null when creating a recipe.");
+        }
+
+        if (Objects.isNull(recipe.getDifficulty())) {
+            throw new IllegalArgumentException("Difficulty cannot be null when creating a recipe.");
+        }
+
+        if (Objects.isNull(recipe.getRecipeIngredients())) {
+            throw new IllegalArgumentException("Ingredients cannot be null when creating a recipe, you must have a value or remove the property.");
+        }
     }
 }

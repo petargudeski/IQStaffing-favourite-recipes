@@ -45,21 +45,22 @@ public class RecipeController {
         return new ResponseEntity(createdDto, HttpStatus.CREATED);
     }
 
-    @Operation(description = "Get Recipe")
+    @Operation(description = "Update recipe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
             @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
-            @ApiResponse(responseCode = "200", description = "Request was successful.")})
-    @GetMapping(value = "/{recipeId}")
-    public ResponseEntity<RecipeDto> get(@PathVariable(value = "recipeId") Long recipeId) {
+            @ApiResponse(responseCode = "200", description = "Recipe was successful created.")})
+    @PutMapping(value= "/{recipeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RecipeDto> update(@RequestBody Recipe recipe,
+                                            @PathVariable(value = "recipeId") Long recipeId) {
+        Recipe updated = recipeService.update(recipeId, recipe);
+        log.info("Recipe with id={} successful updated.", updated.getId());
 
-        Recipe recipe = recipeService.getById(recipeId);
-        log.info("Fetch instruction with id={}", recipeId);
-
-        RecipeDto recipeDto = conversionService.convert(recipe, RecipeDto.class);
-        return new ResponseEntity(recipeDto, HttpStatus.OK);
+        RecipeDto updatedDto = conversionService.convert(updated, RecipeDto.class);
+        return new ResponseEntity(updatedDto, HttpStatus.OK);
     }
 
+    @Operation(description = "Add ingredients to recipe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
             @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
@@ -73,6 +74,21 @@ public class RecipeController {
 
         RecipeDto recipeDto = conversionService.convert(recipe, RecipeDto.class);
         return new ResponseEntity(recipeDto, HttpStatus.CREATED);
+    }
+
+    @Operation(description = "Get Recipe")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping(value = "/{recipeId}")
+    public ResponseEntity<RecipeDto> get(@PathVariable(value = "recipeId") Long recipeId) {
+
+        Recipe recipe = recipeService.getById(recipeId);
+        log.info("Fetch instruction with id={}", recipeId);
+
+        RecipeDto recipeDto = conversionService.convert(recipe, RecipeDto.class);
+        return new ResponseEntity(recipeDto, HttpStatus.OK);
     }
 
     @Operation(description = "Delete instruction")

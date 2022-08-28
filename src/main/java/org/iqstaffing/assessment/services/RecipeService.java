@@ -11,6 +11,8 @@ public interface RecipeService {
 
     Recipe add(Recipe recipe);
 
+    Recipe update(Long recipeId, Recipe recipe);
+
     Recipe addIngredient(Long id, List<Ingredient> body, int quantity, String unit);
 
     void delete(Long id);

@@ -46,7 +46,7 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     private Note note;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "instruction_id")
     private Instruction instruction;
 

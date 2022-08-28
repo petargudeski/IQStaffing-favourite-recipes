@@ -1,7 +1,7 @@
 package org.iqstaffing.assessment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 @Table(schema = "FAVORITE_RECIPES", name = "NOTE")
-@Getter
+@Data
 public class Note {
 
     @Id
