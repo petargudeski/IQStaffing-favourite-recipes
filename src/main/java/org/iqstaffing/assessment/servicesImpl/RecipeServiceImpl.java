@@ -7,6 +7,7 @@ import org.iqstaffing.assessment.models.Ingredient;
 import org.iqstaffing.assessment.models.Instruction;
 import org.iqstaffing.assessment.models.Note;
 import org.iqstaffing.assessment.models.RecipeIngredient;
+import org.iqstaffing.assessment.models.enums.Category;
 import org.iqstaffing.assessment.models.enums.Unit;
 import org.iqstaffing.assessment.repositories.RecipeRepository;
 import org.iqstaffing.assessment.services.IngredientService;
@@ -173,6 +174,46 @@ public class RecipeServiceImpl implements RecipeService {
         );
 
         return recipe;
+    }
+
+    /**
+     * @param category { NONE, VEGAN, VEGETARIAN, GLUTEN_FREE }
+     * @return return all recipes by chosen category
+     */
+    @Override
+    public List<Recipe> getAllByCategory(Category category) {
+        return recipeRepository.findAllByCategory(category);
+    }
+
+    /**
+     * @param numberOfServings number of plates
+     * @return  all recipes with this number of plates
+     */
+    @Override
+    public List<Recipe> getAllByNumberOfServings(int numberOfServings){
+        return recipeRepository.findAllByNumberOfServings(numberOfServings);
+    }
+
+    /**
+     *
+     * @param ingredients List of ingredients
+     * @param isIncluded flag which tell us if these ingredients need to be included in the recipe or not
+     * @return list of recipes with or without there ingredients
+     */
+    @Override
+    public List<Recipe> getAllRecipesByIngredients(List<String> ingredients, boolean isIncluded) {
+        List<Recipe> recipes;
+
+        if(ingredients.isEmpty()) {
+            recipes = recipeRepository.findAll();
+        } else {
+            if (isIncluded) {
+                recipes = recipeRepository.findAllByRecipeIngredients_Ingredient_nameIn(ingredients);
+            } else {
+                recipes = recipeRepository.findAllByRecipeIngredients_Ingredient_nameNotIn(ingredients);
+            }
+        }
+        return recipes;
     }
 
     /**

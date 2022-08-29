@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.iqstaffing.assessment.models.Ingredient;
 import org.iqstaffing.assessment.models.Recipe;
 import org.iqstaffing.assessment.models.dtos.RecipeDto;
+import org.iqstaffing.assessment.models.dtos.converters.RecipeToDtoConverter;
+import org.iqstaffing.assessment.models.enums.Category;
 import org.iqstaffing.assessment.services.RecipeService;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
@@ -25,10 +27,12 @@ public class RecipeController {
 
     private final RecipeService recipeService;
     private final ConversionService conversionService;
+    private final RecipeToDtoConverter recipeToDtoConverter;
 
-    public RecipeController(RecipeService recipeService, ConversionService conversionService) {
+    public RecipeController(RecipeService recipeService, ConversionService conversionService, RecipeToDtoConverter recipeToDtoConverter) {
         this.recipeService = recipeService;
         this.conversionService = conversionService;
+        this.recipeToDtoConverter = recipeToDtoConverter;
     }
 
     @Operation(description = "Create recipe")
@@ -50,7 +54,7 @@ public class RecipeController {
             @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
             @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
             @ApiResponse(responseCode = "200", description = "Recipe was successful created.")})
-    @PutMapping(value= "/{recipeId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{recipeId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RecipeDto> update(@RequestBody Recipe recipe,
                                             @PathVariable(value = "recipeId") Long recipeId) {
         Recipe updated = recipeService.update(recipeId, recipe);
@@ -65,7 +69,7 @@ public class RecipeController {
             @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
             @ApiResponse(responseCode = "404", description = "Recipe not found in database."),
             @ApiResponse(responseCode = "201", description = "Recipe was successful created.")})
-    @PostMapping(value= "/{recipeId}/ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{recipeId}/ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RecipeDto> addIngredient(@RequestBody List<Ingredient> ingredients,
                                                    @PathVariable(value = "recipeId") Long recipeId,
                                                    @RequestParam(value = "quantity") int quantity,
@@ -91,7 +95,60 @@ public class RecipeController {
         return new ResponseEntity(recipeDto, HttpStatus.OK);
     }
 
-    @Operation(description = "Delete instruction")
+    @Operation(description = "Get Recipes by Category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping(value = "/category")
+    public ResponseEntity<List<RecipeDto>> getByCategory(
+            @RequestParam(value = "category", defaultValue = "VEGETARIAN", required = false) Category category) {
+
+        List<Recipe> recipes = recipeService.getAllByCategory(category);
+        log.info("Selected all recipes from {} category.", category);
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Get Recipes by number of servings")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping(value = "/servings")
+    public ResponseEntity<List<RecipeDto>> getByNumberOfServings(
+            @RequestParam(value = "servings", defaultValue = "1", required = false) int servings) {
+
+        List<Recipe> recipes = recipeService.getAllByNumberOfServings(servings);
+        log.info("Selected all recipes with {} number of servings.", servings);
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Get Recipes by Specific Ingredients")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping(value = "/ingredients")
+    public ResponseEntity<List<RecipeDto>> getByIngredients(
+            @RequestParam(value = "ingredients", defaultValue = "", required = false) List<String> ingredients,
+            @RequestParam(value = "included", defaultValue = "true", required = false) boolean isIncluded) {
+
+        List<Recipe> recipes = recipeService.getAllRecipesByIngredients(ingredients, isIncluded);
+        if (isIncluded) {
+            log.info("Fetch recipes with ingredients {}", ingredients);
+        } else {
+            log.info("Fetch recipes without ingredients {}", ingredients);
+        }
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Delete recipe")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs"),
             @ApiResponse(responseCode = "404", description = "Recipe not found in database"),
