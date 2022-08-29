@@ -38,6 +38,7 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
                 .map(recipeIngredient -> {
                     RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
                     IngredientDto ingredientDto = new IngredientDto();
+                    ingredientDto.setId(recipeIngredient.getIngredient().getId());
                     ingredientDto.setName(recipeIngredient.getIngredient().getName());
                     recipeIngredientDto.setIngredient(ingredientDto);
                     recipeIngredientDto.setQuantity(recipeIngredient.getQuantity());
