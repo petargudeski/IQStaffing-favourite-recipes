@@ -1,7 +1,8 @@
 package org.iqstaffing.assessment.repositories;
 
 import org.iqstaffing.assessment.models.Instruction;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface InstructionRepository extends JpaRepository<Instruction, Long> {
+@Repository
+public interface InstructionRepository extends SearchRepository<Instruction, Long> {
 }

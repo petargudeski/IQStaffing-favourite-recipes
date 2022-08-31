@@ -21,6 +21,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -28,6 +29,9 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
+
+    private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name", "category");
+
 
     private final RecipeRepository recipeRepository;
     private final IngredientService ingredientService;
@@ -214,6 +218,26 @@ public class RecipeServiceImpl implements RecipeService {
             }
         }
         return recipes;
+    }
+
+    /**
+     *
+     * @param text text to be searched
+     * @param fields in which fields to be searched
+     * @param limit
+     * @return full text search
+     */
+    public List<Recipe> searchRecipes(String text, List<String> fields, int limit) {
+
+        List<String> fieldsToSearchBy = fields.isEmpty() ? SEARCHABLE_FIELDS : fields;
+
+        boolean containsInvalidField = fieldsToSearchBy.stream(). anyMatch(f -> !SEARCHABLE_FIELDS.contains(f));
+
+        if(containsInvalidField) {
+            throw new IllegalArgumentException();
+        }
+
+        return recipeRepository.searchBy(text, limit, fieldsToSearchBy.toArray(new String[0]));
     }
 
     /**

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.iqstaffing.assessment.models.Ingredient;
 import org.iqstaffing.assessment.models.Recipe;
 import org.iqstaffing.assessment.models.dtos.RecipeDto;
+import org.iqstaffing.assessment.models.dtos.SearchRequestDTO;
 import org.iqstaffing.assessment.models.dtos.converters.RecipeToDtoConverter;
 import org.iqstaffing.assessment.models.enums.Category;
 import org.iqstaffing.assessment.services.RecipeService;
@@ -143,6 +144,22 @@ public class RecipeController {
         } else {
             log.info("Fetch recipes without ingredients {}", ingredients);
         }
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Get Recipes by Specific text")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping("/search")
+    public ResponseEntity<List<RecipeDto>> search(SearchRequestDTO searchRequestDTO) {
+
+        log.info("Request for plant search received with data : " + searchRequestDTO);
+
+        List<Recipe> recipes = recipeService.searchRecipes(searchRequestDTO.getText(), searchRequestDTO.getFields(), searchRequestDTO.getLimit());
 
         List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
         return new ResponseEntity(recipesDto, HttpStatus.OK);

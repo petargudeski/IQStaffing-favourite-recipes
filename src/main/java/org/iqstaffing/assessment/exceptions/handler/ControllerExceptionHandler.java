@@ -1,6 +1,7 @@
 package org.iqstaffing.assessment.exceptions.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.iqstaffing.assessment.exceptions.IndexException;
 import org.iqstaffing.assessment.exceptions.IngredientNotFoundException;
 import org.iqstaffing.assessment.exceptions.InstructionNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -25,11 +26,11 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNotFound(RuntimeException exception, WebRequest request) {
         return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
-//
-//    @ExceptionHandler({})
-//    public ResponseEntity<Object> handleConflict(RuntimeException exception, WebRequest request) {
-//        return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.CONFLICT, request);
-//    }
+
+    @ExceptionHandler({IndexException.class})
+    public ResponseEntity<Object> handleServerError(RuntimeException exception, WebRequest request) {
+        return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
+    }
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception exception, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {

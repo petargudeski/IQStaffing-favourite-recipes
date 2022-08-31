@@ -22,5 +22,7 @@ public interface RecipeService {
 
     List<Recipe> getAllRecipesByIngredients(List<String> ingredients, boolean isIncluded);
 
+    List<Recipe> searchRecipes(String text, List<String> fields, int limit);
+
     void delete(Long id);
 }

@@ -1,7 +1,8 @@
 package org.iqstaffing.assessment.repositories;
 
 import org.iqstaffing.assessment.models.Ingredient;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
+@Repository
+public interface IngredientRepository extends SearchRepository<Ingredient, Long> {
 }

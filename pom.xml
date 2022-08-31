@@ -23,6 +23,7 @@
         <tomcat-jdbc.version>10.1.0-M15</tomcat-jdbc.version>
         <h2.database>2.1.214</h2.database>
         <springdoc-openapi.version>1.6.8</springdoc-openapi.version>
+        <hibernate.search.version>6.1.1.Final</hibernate.search.version>
     </properties>
 
     <dependencies>
@@ -84,6 +85,17 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.search</groupId>
+            <artifactId>hibernate-search-mapper-orm</artifactId>
+            <version>${hibernate.search.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.search</groupId>
+            <artifactId>hibernate-search-backend-lucene</artifactId>
+            <version>${hibernate.search.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
