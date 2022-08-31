@@ -22,7 +22,6 @@ public class Indexer {
     }
 
     public void indexPersistedData(String indexClassName) throws IndexException {
-
         try {
             SearchSession searchSession = Search.session(entityManager);
 
@@ -31,7 +30,6 @@ public class Indexer {
                     searchSession
                             .massIndexer(classToIndex)
                             .threadsToLoadObjects(THREAD_NUMBER);
-
             indexer.startAndWait();
         } catch (ClassNotFoundException e) {
             throw new IndexException("Invalid class " + indexClassName, e);

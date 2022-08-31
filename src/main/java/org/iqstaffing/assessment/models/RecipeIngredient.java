@@ -2,6 +2,12 @@ package org.iqstaffing.assessment.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.IdentifierBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.DocumentId;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexingDependency;
+import org.iqstaffing.assessment.models.bridges.RecipeIngredientBridge;
 import org.iqstaffing.assessment.models.enums.Unit;
 
 import javax.persistence.Entity;
@@ -18,6 +24,9 @@ import javax.persistence.JoinColumn;
 public class RecipeIngredient {
 
     @EmbeddedId
+    @DocumentId(
+            identifierBridge = @IdentifierBridgeRef(type = RecipeIngredientBridge.class)
+    )
     private RecipeIngredientKey id = new RecipeIngredientKey();
 
     @ManyToOne
@@ -26,6 +35,8 @@ public class RecipeIngredient {
     @JsonIgnore
     private Recipe recipe;
 
+    @IndexedEmbedded
+    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @ManyToOne
     @MapsId("ingredientId")
     @JoinColumn(name = "ingredient_id")

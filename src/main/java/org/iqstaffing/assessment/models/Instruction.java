@@ -1,6 +1,7 @@
 package org.iqstaffing.assessment.models;
 
 import lombok.Data;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -17,6 +18,7 @@ public class Instruction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FullTextField
     private String instruction;
 
     public Instruction() {}

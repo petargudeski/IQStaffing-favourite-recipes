@@ -18,7 +18,7 @@ public class IqStaffingFavouriteRecipesApplication {
 
 	@Bean
 	public ApplicationRunner buildIndex(Indexer indexer) throws Exception {
-		return (ApplicationArguments args) -> {
+				return (ApplicationArguments args) -> {
 			indexer.indexPersistedData("org.iqstaffing.assessment.models.Recipe");
 		};
 	}

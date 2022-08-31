@@ -9,3 +9,22 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
+data/index/Recipe/segments_15
+data/index/Recipe/write.lock
+Recipe/segments_1
+Recipe/write.lock
+data/index/Instruction/_0.cfe
+data/index/Instruction/_0.cfs
+data/index/Instruction/_0.si
+data/index/Instruction/_1.cfe
+data/index/Instruction/_1.cfs
+data/index/Instruction/_1.si
+data/index/Instruction/_2.cfe
+data/index/Instruction/_2.cfs
+data/index/Instruction/_2.si
+data/index/Instruction/segments_4
+data/index/Instruction/write.lock
+data/index/Recipe/_k.cfe
+data/index/Recipe/_k.cfs
+data/index/Recipe/_k.si
+data/index/Recipe/segments_1m

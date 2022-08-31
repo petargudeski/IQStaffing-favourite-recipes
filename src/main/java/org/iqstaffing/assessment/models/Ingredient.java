@@ -3,6 +3,7 @@ package org.iqstaffing.assessment.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,11 +32,12 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @FullTextField()
     private String name;
 
     @OneToMany(mappedBy = "ingredient", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<RecipeIngredient> recipeIngredients = new LinkedList<>();
+    private List<RecipeIngredient> ingredientsRecipe = new LinkedList<>();
 
     @CreatedDate
     @Column(name = "CREATED_AT")

@@ -1,11 +1,8 @@
 package org.iqstaffing.assessment.models;
 
 import lombok.Data;
-import org.hibernate.search.mapper.pojo.bridge.builtin.annotation.AlternativeDiscriminator;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
+import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
 import org.iqstaffing.assessment.models.enums.Category;
 import org.iqstaffing.assessment.models.enums.Difficulty;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,26 +25,29 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@FullTextField()
+    @FullTextField()
     private String name;
 
-    //@GeneratedValue()
+    //@GenericField
     @Column(name = "NUMBER_OF_SERVINGS")
     private int numberOfServings;
 
     private Difficulty difficulty;
 
-    @AlternativeDiscriminator
+    //@AlternativeDiscriminator
 //    @Enumerated(EnumType.STRING)
     private Category category;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Note note;
 
+    @IndexedEmbedded
+    @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "instruction_id")
     private Instruction instruction;
 
+    @IndexedEmbedded
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL ,fetch = FetchType.EAGER)
     private List<RecipeIngredient> recipeIngredients = new LinkedList<>();
 
