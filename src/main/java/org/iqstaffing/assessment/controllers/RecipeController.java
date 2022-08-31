@@ -157,9 +157,57 @@ public class RecipeController {
     @GetMapping("/search")
     public ResponseEntity<List<RecipeDto>> search(SearchRequestDTO searchRequestDTO) {
 
-        log.info("Request for plant search received with data : " + searchRequestDTO);
+        log.info("Request for recipe search received with data : " + searchRequestDTO);
 
         List<Recipe> recipes = recipeService.searchRecipes(searchRequestDTO.getText(), searchRequestDTO.getFields(), searchRequestDTO.getLimit());
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Get Recipes by Specific text group by category ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping("/search/category")
+    public ResponseEntity<List<RecipeDto>> searchByCategory(SearchRequestDTO searchRequestDTO) {
+
+        log.info("Request for recipe search received with data : " + searchRequestDTO);
+
+        List<Recipe> recipes = recipeService.searchRecipesByCategory(searchRequestDTO.getText());
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Get Recipes by Specific text group by number of servings ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping("/search/servings")
+    public ResponseEntity<List<RecipeDto>> searchByNumberOfServings(SearchRequestDTO searchRequestDTO) {
+
+        log.info("Request for recipe search received with data : " + searchRequestDTO);
+
+        List<Recipe> recipes = recipeService.searchByServingsAndInsructions(searchRequestDTO.getText());
+
+        List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
+        return new ResponseEntity(recipesDto, HttpStatus.OK);
+    }
+
+    @Operation(description = "Get Recipes by Specific text group by number of servings ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500", description = "Something got wrong, check the logs."),
+            @ApiResponse(responseCode = "404", description = "Recipes not found in database."),
+            @ApiResponse(responseCode = "200", description = "Request was successful.")})
+    @GetMapping("/search/excluded/ingredients")
+    public ResponseEntity<List<RecipeDto>> searchByExcludedIngredients(SearchRequestDTO searchRequestDTO) {
+
+        log.info("Request for recipe search received with data : " + searchRequestDTO);
+
+        List<Recipe> recipes = recipeService.searchByExcludedIngredient(searchRequestDTO.getText());
 
         List<RecipeDto> recipesDto = recipeToDtoConverter.convert(recipes);
         return new ResponseEntity(recipesDto, HttpStatus.OK);

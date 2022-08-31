@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RecipeServiceImpl implements RecipeService {
 
-    private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name", "recipeIngredients.ingredient.name", "instruction.instruction");
+    private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name", "numberOfServings", "category", "recipeIngredients.ingredient.name", "instruction.instruction");
 
 
     private final RecipeRepository recipeRepository;
@@ -232,6 +232,34 @@ public class RecipeServiceImpl implements RecipeService {
         List<String> fieldsToSearchBy = fields.isEmpty() ? SEARCHABLE_FIELDS : fields;
 
         return recipeRepository.searchBy(text, limit, fieldsToSearchBy.toArray(new String[0]));
+    }
+
+    /**
+     * @param text input from Controller/FE
+     * @return all recipes by category in the text
+     */
+    public List<Recipe> searchRecipesByCategory(String text) {
+        return recipeRepository.searchByCategory(text);
+    }
+
+
+    /**
+     * @param text input from Controller/FE
+     * @return all recipes by servings and instructions in the text
+     */
+    @Override
+    public List<Recipe> searchByServingsAndInsructions(String text) {
+        return recipeRepository.searchByServingsAndInsructions(text);
+    }
+
+
+    /**
+     * @param text input from Controller/FE
+     * @return all recipes by excluded ingredients in the text
+     */
+    @Override
+    public List<Recipe> searchByExcludedIngredient(String text) {
+        return recipeRepository.searchByExcludedIngredient(text);
     }
 
     /**

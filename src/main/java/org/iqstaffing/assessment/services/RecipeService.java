@@ -24,5 +24,11 @@ public interface RecipeService {
 
     List<Recipe> searchRecipes(String text, List<String> fields, int limit);
 
+    List<Recipe> searchRecipesByCategory(String text);
+
+    List<Recipe> searchByServingsAndInsructions(String text);
+
+    List<Recipe> searchByExcludedIngredient(String text);
+
     void delete(Long id);
 }

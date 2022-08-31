@@ -1,6 +1,7 @@
 package org.iqstaffing.assessment.exceptions.handler;
 
 import lombok.extern.slf4j.Slf4j;
+import org.iqstaffing.assessment.exceptions.CategoryNotFoundException;
 import org.iqstaffing.assessment.exceptions.IndexException;
 import org.iqstaffing.assessment.exceptions.IngredientNotFoundException;
 import org.iqstaffing.assessment.exceptions.InstructionNotFoundException;
@@ -22,7 +23,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler({InstructionNotFoundException.class, IngredientNotFoundException.class})
+    @ExceptionHandler({InstructionNotFoundException.class, IngredientNotFoundException.class, CategoryNotFoundException.class})
     public ResponseEntity<Object> handleNotFound(RuntimeException exception, WebRequest request) {
         return handleExceptionInternal(exception, null, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }

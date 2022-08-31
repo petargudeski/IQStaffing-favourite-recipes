@@ -1,8 +1,12 @@
 package org.iqstaffing.assessment.models;
 
 import lombok.Data;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.*;
+import org.iqstaffing.assessment.models.bridges.EnumValueBridge;
+import org.iqstaffing.assessment.models.bridges.IntegerBridge;
 import org.iqstaffing.assessment.models.enums.Category;
 import org.iqstaffing.assessment.models.enums.Difficulty;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,14 +32,14 @@ public class Recipe {
     @FullTextField()
     private String name;
 
-    //@GenericField
+    @GenericField(valueBridge = @ValueBridgeRef(type = IntegerBridge.class))
     @Column(name = "NUMBER_OF_SERVINGS")
-    private int numberOfServings;
+    private Integer numberOfServings;
 
     private Difficulty difficulty;
 
-    //@AlternativeDiscriminator
-//    @Enumerated(EnumType.STRING)
+    @GenericField(searchable = Searchable.YES, valueBridge = @ValueBridgeRef(type = EnumValueBridge.class))
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @OneToOne(cascade = CascadeType.ALL)

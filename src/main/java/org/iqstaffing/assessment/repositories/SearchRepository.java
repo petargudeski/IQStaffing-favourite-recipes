@@ -10,4 +10,10 @@ import java.util.List;
 public interface SearchRepository<T, ID extends Serializable> extends JpaRepository<T, ID> {
 
     List<T> searchBy(String text, int limit, String... fields);
+
+    List<T> searchByCategory(String text);
+
+    List<T> searchByServingsAndInsructions(String text);
+
+    List<T> searchByExcludedIngredient(String text);
 }
