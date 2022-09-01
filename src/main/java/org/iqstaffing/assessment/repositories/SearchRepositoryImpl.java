@@ -21,6 +21,7 @@ public class SearchRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
 
     private final EntityManager entityManager;
 
+
     public SearchRepositoryImpl(Class<T> domainClass, EntityManager entityManager) {
         super(domainClass, entityManager);
         this.entityManager = entityManager;
