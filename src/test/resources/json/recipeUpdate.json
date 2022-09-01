@@ -1,0 +1,36 @@
+{
+  "name": "Test name 111",
+  "numberOfServings": 111,
+  "difficulty": "EASY",
+  "category": "VEGAN",
+  "note": {
+    "note": "Test Note 111"
+  },
+  "instruction": {
+    "instruction": "Test Instruction 111"
+  },
+  "recipeIngredients": [
+    {
+      "id": {
+        "recipeId": 1,
+        "ingredientId": 1
+      },
+      "ingredient": {
+        "name": "Test Test 11"
+      },
+      "unit": "COUNT",
+      "quantity": 22
+    },
+    {
+      "id": {
+        "recipeId": 1,
+        "ingredientId": 2
+      },
+      "ingredient": {
+        "name": "Test Test 222"
+      },
+      "unit": "HANDFUL",
+      "quantity": 222
+    }
+  ]
+}

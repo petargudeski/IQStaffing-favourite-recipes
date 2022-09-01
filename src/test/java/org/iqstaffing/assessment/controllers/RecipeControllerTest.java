@@ -2,9 +2,6 @@ package org.iqstaffing.assessment.controllers;
 
 import io.micrometer.core.instrument.util.IOUtils;
 import org.iqstaffing.assessment.builders.RecipeBuilder;
-import org.iqstaffing.assessment.exceptions.handler.ControllerExceptionHandler;
-import org.iqstaffing.assessment.models.Recipe;
-import org.iqstaffing.assessment.models.dtos.RecipeDto;
 import org.iqstaffing.assessment.models.dtos.converters.RecipeToDtoConverter;
 import org.iqstaffing.assessment.repositories.RecipeRepository;
 import org.iqstaffing.assessment.services.RecipeService;
@@ -15,12 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -29,16 +26,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class RecipeControllerTest {
 
-    //I need to create tests for the Recipe response converter and DTO
-
-    /*@Autowired
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Mock
+    private RecipeToDtoConverter recipeToDtoConverter;
+
+    @Mock
+    private ConversionService conversionService;
 
     @Mock
     private RecipeService recipeService;
@@ -49,16 +50,15 @@ public class RecipeControllerTest {
     private MediaType contentType = MediaType.APPLICATION_JSON;
 
     private String recipesRequest;
-    private RecipeToDtoConverter recipeToDtoConverter;
 
+    private String updateRequest;
 
     @BeforeEach
     public void given() {
         mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
-        recipeToDtoConverter = new RecipeToDtoConverter();
-
         recipesRequest = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("json/recipe.json"), Charset.defaultCharset());
+        updateRequest = IOUtils.toString(getClass().getClassLoader().getResourceAsStream("json/recipeUpdate.json"), Charset.defaultCharset());
     }
 
     @Test
@@ -77,15 +77,15 @@ public class RecipeControllerTest {
 
         mockMvc.perform(put("/api/recipes/1")
                         .contentType(contentType)
-                        .content(recipesRequest))
+                        .content(updateRequest))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void searchByCategory() throws Exception {
-        when(recipeService.searchRecipesByCategory(any())).thenReturn(new ArrayList<>());
+        //when(recipeService.searchRecipesByCategory(any())).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/search/category")
+        mockMvc.perform(get("/api/recipes/search/category")
                         .contentType(contentType)
                         .param("text", "All vegetarian recipes"))
                 .andExpect(status().isOk());
@@ -93,9 +93,9 @@ public class RecipeControllerTest {
 
     @Test
     public void searchByExcludedIngredient() throws Exception {
-        when(recipeService.searchByExcludedIngredient(any())).thenReturn(new ArrayList<>());
+        //when(recipeService.searchByExcludedIngredient(any())).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/search/excluded/ingredients")
+        mockMvc.perform(get("/api/recipes/search/excluded/ingredients")
                         .contentType(contentType)
                         .param("text", "Recipes without “salmon” as an ingredient that has “oven” in the instructions."))
                 .andExpect(status().isOk());
@@ -103,13 +103,12 @@ public class RecipeControllerTest {
 
     @Test
     public void searchByServingsAndInsructions() throws Exception {
-        when(recipeService.searchByServingsAndInsructions(any())).thenReturn(new ArrayList<>());
+        //when(recipeService.searchByServingsAndInsructions(any())).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/search/category")
+        mockMvc.perform(get("/api/recipes/search/category")
                         .contentType(contentType)
                         .param("text", "Recipes that can serve 4 persons and have “potatoes” as an ingredient"))
                 .andExpect(status().isOk());
     }
-    */
 
 }
