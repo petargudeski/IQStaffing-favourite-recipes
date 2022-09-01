@@ -28,3 +28,5 @@ data/index/Recipe/_k.cfe
 data/index/Recipe/_k.cfs
 data/index/Recipe/_k.si
 data/index/Recipe/segments_1m
+data/test/index/Recipe/segments_2
+data/test/index/Recipe/write.lock
