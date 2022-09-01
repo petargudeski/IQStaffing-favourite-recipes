@@ -19,9 +19,13 @@ spring:
         format_sql: false # set to true for debugging integration tests
         ddl-auto: update
         search:
+          automatic_indexing:
+            synchronization:
+              strategy:
           backend:
             type: lucene
-            directory.root: ./data/index
+            directory.type: local-heap
+            directory.root: ./data/test/index
 
 springdoc:
   pathsToMatch: /api/**

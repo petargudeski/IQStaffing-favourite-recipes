@@ -13,7 +13,7 @@ public class RecipeBuilder {
     private Integer numberOfservings = 4;
     private Difficulty difficulty = Difficulty.MEDIUM;
     private Category category = Category.VEGETARIAN;
-    private Instruction instruction = new Instruction("Test instruction");
+
     private List<RecipeIngredient> recipeIngredients = new LinkedList<>();
 
     public Recipe build() {
@@ -22,18 +22,36 @@ public class RecipeBuilder {
         recipe.setNumberOfServings(numberOfservings);
         recipe.setDifficulty(difficulty);
         recipe.setCategory(category);
-        recipe.setNote(new Note("Test Note", recipe));
+        Note note = buildNote();
+        recipe.setNote(note);
+        Instruction instruction = buildInstruction();
         recipe.setInstruction(instruction);
         RecipeIngredient rg1 = new RecipeIngredient();
-        rg1.setIngredient(new Ingredient("Test Ingredient"));
+        Ingredient ing1 = buildIngredient();
+        rg1.setIngredient(ing1);
         rg1.setRecipe(recipe);
-        RecipeIngredient rg2 = new RecipeIngredient();
-        rg2.setIngredient(new Ingredient("Test 2 Ingredient"));
-        rg2.setRecipe(recipe);
         recipeIngredients.add(rg1);
-        recipeIngredients.add(rg2);
         recipe.setRecipeIngredients(recipeIngredients);
 
         return recipe;
     }
+
+    public Note buildNote() {
+        Note note = new Note();
+        note.setNote("Test note");
+        return note;
+    }
+
+    public Instruction buildInstruction() {
+        Instruction instruction = new Instruction();
+        instruction.setInstruction("oven");
+        return instruction;
+    }
+
+    public Ingredient buildIngredient() {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName("Test ingredient patatos");
+        return ingredient;
+    }
+
 }
