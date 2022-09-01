@@ -1,0 +1,28 @@
+{
+  "name": "Test Recipe",
+  "numberOfServings": 4,
+  "difficulty": "EASY",
+  "category": "VEGETARIAN",
+  "note": {
+    "note": "Test Note 22"
+  },
+  "instruction": {
+    "instruction": "Prepared in oven"
+  },
+  "recipeIngredients": [
+    {
+      "ingredient": {
+        "name": "potatoes"
+      },
+      "unit": "COUNT",
+      "quantity": 2
+    },
+    {
+      "ingredient": {
+        "name": "Pork"
+      },
+      "unit": "COUNT",
+      "quantity": 2
+    }
+  ]
+}
